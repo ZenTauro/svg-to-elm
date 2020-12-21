@@ -18,10 +18,12 @@ const argv = yargs
   .alias('o', 'output')
   .alias('m', 'module-name')
   .alias('b', 'banner')
+  .alias('d', 'dir-mode')
   .describe('f', 'The SVG to parse')
   .describe('o', 'The destination to write to')
   .describe('m', 'The name of the Elm module')
   .describe('b', 'A code comment to put in each file.')
+  .describe('d', 'If specified, translates all files in dir f to dir o, uses m as module prefix')
   .describe(
     'elm-version',
     'The version of Elm to use [0.18 or 0.19]. This is passed to elm-format if you use it.',
@@ -37,6 +39,9 @@ const argv = yargs
 
 const parser = new Parser();
 
+if (argv.d) {
+  parser.process_dir(argv, argv.f, argv.o, argv.m)
+} else {
 parser
   .parse(argv.f, {
     moduleName: argv.m,
@@ -68,3 +73,4 @@ parser
   .catch(err => {
     console.log('Error parsing svg:', chalk.red(err.message));
   });
+}
